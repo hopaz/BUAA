@@ -164,10 +164,18 @@ namespace Calculator
         private void button19_Click_1(object sender, EventArgs e)
         {
             String expression_str = textBox1.Text;
+            List<String> expression_list = new List<String>();
+            String tmp = "";
+            //表达式string转换成包含操作数+操作符的list
+            if(expression_str[0].ToString() == "+" || expression_str[0].ToString() == "-"){
+                    
+            }
+            if(){
+            }
+
             for (int cnt = 0; cnt < expression_str.Length; cnt++) { 
                 //调度场算法（中缀表达式转后缀表达式）
                 if(expression_str[cnt].ToString() == "("){
-
                 }
             }
         }
