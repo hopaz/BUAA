@@ -1,9 +1,9 @@
 D:\BUAA\Calculator\bin\Debug\Calculator.exe.config
 D:\BUAA\Calculator\bin\Debug\Calculator.exe
 D:\BUAA\Calculator\bin\Debug\Calculator.pdb
-D:\BUAA\Calculator\obj\Debug\Calculator.csprojResolveAssemblyReference.cache
 D:\BUAA\Calculator\obj\Debug\Calculator.Form1.resources
 D:\BUAA\Calculator\obj\Debug\Calculator.Properties.Resources.resources
 D:\BUAA\Calculator\obj\Debug\Calculator.csproj.GenerateResource.Cache
 D:\BUAA\Calculator\obj\Debug\Calculator.exe
 D:\BUAA\Calculator\obj\Debug\Calculator.pdb
+D:\BUAA\Calculator\obj\Debug\Calculator.csprojResolveAssemblyReference.cache
