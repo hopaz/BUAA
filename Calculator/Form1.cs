@@ -273,18 +273,20 @@ namespace Calculator
                 if (OPERAND.Contains(c)){
                     number_tmp = number_tmp + c;
                 }else if(OPERATORS.Contains(c)){
-                    expression_list.Add(number_tmp.ToString());
-                    number_tmp = "";
+                    if (number_tmp != "") {
+                        expression_list.Add(number_tmp.ToString());
+                        number_tmp = "";
+                    }
                     expression_list.Add(c.ToString());
                 }
                 if(i == len - 1){
                     expression_list.Add(number_tmp.ToString());
                 }
-
             }
             foreach (String s1 in expression_list) {
                 Console.WriteLine(s1);
             }
+            Console.WriteLine("1");
 
             ///<summary>
             ///调度场算法（中缀表达式转后缀表达式）
@@ -307,16 +309,15 @@ namespace Calculator
                 {
                     //是整数或小数，直接输出
                     expression_post_list.Add(expression_list[cnt]);
-
                 }else if(reg_operator.IsMatch(expression_list[cnt])){
                     //是操作符,循环比较当前操作符与栈顶操作符优先级
-                    while(s.Count != 0 && (int)priority[expression_list[cnt]] <= (int)priority[s.Peek()]){
+                    while(s.Count != 0 && s.Peek() != "(" && (int)priority[expression_list[cnt]] <= (int)priority[s.Peek()]){
                         //当前操作符优先级等于或低于栈顶元素优先级，出栈直到高于栈顶元素优先级或栈空
-                        if (s.Peek() != "(")
-                        {
+                        //if (s.Peek() != "(")
+                        //{
                             //栈顶元素不是"(",出栈
                             expression_post_list.Add(s.Pop().ToString());
-                        }
+                        //}
                         //栈顶元素是"(",不出栈
                     }
                     //当前栈空或操作符优先级高于栈顶元素优先级，入栈
