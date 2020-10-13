@@ -165,18 +165,35 @@ namespace Calculator
         {
             String expression_str = textBox1.Text;
             List<String> expression_list = new List<String>();
-            String tmp = "";
+            String number_tmp = "";
+            String OPERAND="0123456789.";
+            String OPERATORS="+_*/()";
             //表达式string转换成包含操作数+操作符的list
-            if(expression_str[0].ToString() == "+" || expression_str[0].ToString() == "-"){
-                    
+            for(int i = 0; i < expression_str.Length; i++){
+                Char c = expression_str[i];
+                if (OPERAND.Contains(c))
+                {
+                    number_tmp = string.Join(number_tmp, c);
+                }
+                if(OPERATORS.Contains(c)){
+                    expression_list.Add(number_tmp.ToString());
+                    number_tmp = "";
+                    expression_list.Add(c.ToString());
+                }
+                if (i == expression_str.Length - 1)
+                {
+                    expression_list.Add(number_tmp.ToString());
+                    number_tmp = "";
+                }
             }
-            //if(){
-            //}
+            foreach (String s in expression_list) {
+                Console.WriteLine(s);
+            }
 
+            //调度场算法（中缀表达式转后缀表达式）
+            for (int cnt = 0; cnt < expression_list.Count; cnt++) { 
+                if(expression_list[cnt] == "("){
 
-            for (int cnt = 0; cnt < expression_str.Length; cnt++) { 
-                //调度场算法（中缀表达式转后缀表达式）
-                if(expression_str[cnt].ToString() == "("){
                 }
             }
         }
