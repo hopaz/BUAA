@@ -262,11 +262,12 @@ namespace Calculator
             ///<summary>
             ///表达式string转换成包含操作数+操作符的list
             ///<summary>
-            int len = expression_str.Length;
-            if (expression_str[len - 1] == '+') {
-                expression_str = expression_str.Substring(0, len - 1);
+            Char last_char = expression_str[expression_str.Length - 1];
+            if (last_char == '+' || last_char == '-' || last_char == '*' || last_char == '/')            {
+                expression_str = expression_str.Remove(expression_str.Length - 1, 1);
             }
             Console.WriteLine(expression_str);
+            int len = expression_str.Length;
             for(int i = 0; i < len; i++){
                 Char c = expression_str[i];
                 if (OPERAND.Contains(c)){
@@ -276,6 +277,10 @@ namespace Calculator
                     number_tmp = "";
                     expression_list.Add(c.ToString());
                 }
+                if(i == len - 1){
+                    expression_list.Add(number_tmp.ToString());
+                }
+
             }
             foreach (String s1 in expression_list) {
                 Console.WriteLine(s1);
