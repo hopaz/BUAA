@@ -251,6 +251,39 @@ namespace Calculator
 
         private void button19_Click_1(object sender, EventArgs e)
         {
+        }
+
+        private void button20_Click(object sender, EventArgs e)
+        {
+            String str = textBox1.Text;
+            if (str[0].ToString() == "0" && textBox1.Text.Length == 1)
+            {
+                //expression_str不可以是多个0开头的数字
+                textBox1.Text = "(";
+            }
+            else
+            {
+                textBox1.AppendText("(");
+            }
+        }
+
+        private void button21_Click(object sender, EventArgs e)
+        {
+            String str = textBox1.Text;
+            if (str[0].ToString() == "0" && textBox1.Text.Length == 1)
+            {
+                //expression_str不可以是多个0开头的数字
+                textBox1.Text = ")";
+            }
+            else
+            {
+                textBox1.AppendText(")");
+            }
+        }
+
+        private void Form1_KeyDown(object sender, KeyEventArgs e)
+        {
+            e.SuppressKeyPress = true;
             String expression_str = textBox1.Text;
             List<Oper> expression_list = new List<Oper>();
             String number_tmp = "";
@@ -299,7 +332,10 @@ namespace Calculator
                 }
                 if (i == len - 1)
                 {
-                    expression_list.Add(new OperandDbl(number_tmp));
+                    if (number_tmp != "")
+                    {
+                        expression_list.Add(new OperandDbl(number_tmp));
+                    }
                 }
             }
             Console.WriteLine(">>> Split: {0}", string.Join(",", expression_list));
@@ -319,7 +355,7 @@ namespace Calculator
                     //是整数或小数，直接输出
                     expression_post_list.Add(expression_list[cnt]);
                 }
-                else if (expression_list[cnt] is OperatorItem)
+                else if ("+-*/".Contains(expression_list[cnt].ToString()))
                 {
                     //是操作符,循环比较当前操作符与栈顶操作符优先级
                     while (
@@ -350,6 +386,11 @@ namespace Calculator
                     //"("也弹栈
                     s.Pop();
                 }
+            }
+
+            while (s.Count != 0)
+            {
+                expression_post_list.Add(s.Pop());
             }
 
             //输入数据已经读到末尾，栈中所有操作符出栈
@@ -387,34 +428,6 @@ namespace Calculator
                 }
             }
             textBox1.Text = stk.Pop().ToString();
-        }
-
-        private void button20_Click(object sender, EventArgs e)
-        {
-            String str = textBox1.Text;
-            if (str[0].ToString() == "0" && textBox1.Text.Length == 1)
-            {
-                //expression_str不可以是多个0开头的数字
-                textBox1.Text = "(";
-            }
-            else
-            {
-                textBox1.AppendText("(");
-            }
-        }
-
-        private void button21_Click(object sender, EventArgs e)
-        {
-            String str = textBox1.Text;
-            if (str[0].ToString() == "0" && textBox1.Text.Length == 1)
-            {
-                //expression_str不可以是多个0开头的数字
-                textBox1.Text = ")";
-            }
-            else
-            {
-                textBox1.AppendText(")");
-            }
         }
     }
 }
