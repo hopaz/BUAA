@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace Calculator
 {
-    public abstract class OperatorItem:Item
+    interface IItem
     {
-        public abstract double Calculate(OperandItem a, OperandItem b);
+        string ItemType();
+        string ToString();
     }
 }

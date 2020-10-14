@@ -6,7 +6,11 @@ using System.Threading.Tasks;
 
 namespace Calculator
 {
-    class OperatorDiv:OperandItem
+    class OperatorDiv : OperandItem, IOperator
     {
+        public double Calculate(OperandItem a, OperandItem b)
+        {
+            return a.ToDouble() / b.ToDouble();
+        }
     }
 }

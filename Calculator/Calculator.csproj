@@ -50,6 +50,9 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="IOperand.cs" />
+    <Compile Include="IItem.cs" />
+    <Compile Include="IOperator.cs" />
     <Compile Include="Item.cs" />
     <Compile Include="OperandDbl.cs" />
     <Compile Include="OperandInt.cs" />
