@@ -15,3 +15,4 @@ D:\vs2013_projects\Calculator\Calculator\obj\Debug\Calculator.csprojResolveAssem
 D:\vs2013_projects\Calculator\Calculator\obj\Debug\Calculator.Form1.resources
 D:\vs2013_projects\Calculator\Calculator\obj\Debug\Calculator.Properties.Resources.resources
 D:\vs2013_projects\Calculator\Calculator\obj\Debug\Calculator.csproj.GenerateResource.Cache
+D:\BUAA\Calculator\obj\Debug\Calculator.csprojResolveAssemblyReference.cache

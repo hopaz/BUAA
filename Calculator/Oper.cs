@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace Calculator
 {
-    class OperandInt:OperandItem
+    public abstract class Oper
     {
+        public override abstract string ToString();
     }
 }

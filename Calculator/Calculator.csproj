@@ -50,18 +50,9 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
-    <Compile Include="IOperand.cs" />
-    <Compile Include="IItem.cs" />
-    <Compile Include="IOperator.cs" />
-    <Compile Include="Item.cs" />
-    <Compile Include="OperandDbl.cs" />
-    <Compile Include="OperandInt.cs" />
-    <Compile Include="OperandItem.cs" />
-    <Compile Include="OperatorAdd.cs" />
-    <Compile Include="OperatorDiv.cs" />
-    <Compile Include="OperatorItem.cs" />
-    <Compile Include="OperatorMul.cs" />
-    <Compile Include="OperatorSub.cs" />
+    <Compile Include="Oper.cs" />
+    <Compile Include="Operand.cs" />
+    <Compile Include="Operator.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Form1.resx">
