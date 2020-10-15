@@ -20,10 +20,14 @@ namespace Calculator
             InitializeComponent();
         }
 
+        private String OPERAND = "0123456789.";
+        private String OPERATORS = "+-*/()";
+        private String result = "";
+        
         private void button1_Click(object sender, EventArgs e)
         {
             String str = textBox1.Text;
-            if (str[0].ToString() == "0" && textBox1.Text.Length == 1)
+            if ((str[0].ToString() == "0" && textBox1.Text.Length == 1) || str.Contains('='))
             {
                 //expression_str不可以是多个0开头的数字
                 textBox1.Text = "1";
@@ -32,6 +36,7 @@ namespace Calculator
             {
                 textBox1.AppendText("1");
             }
+            textBox1.Focus();
         }
 
         private void button15_Click(object sender, EventArgs e)
@@ -46,12 +51,13 @@ namespace Calculator
                 str = str.Substring(0, str.Length - 1);
                 textBox1.Text = str;
             }
+            textBox1.Focus();
         }
 
         private void button9_Click(object sender, EventArgs e)
         {
             String str = textBox1.Text;
-            if (str[0].ToString() == "0" && textBox1.Text.Length == 1)
+            if ((str[0].ToString() == "0" && textBox1.Text.Length == 1) || str.Contains('='))
             {
                 //expression_str不可以是多个0开头的数字
                 textBox1.Text = "9";
@@ -60,11 +66,21 @@ namespace Calculator
             {
                 textBox1.AppendText("9");
             }
+            textBox1.Focus();
         }
 
         private void button16_Click(object sender, EventArgs e)
         {
-            textBox1.AppendText(".");
+            String str = textBox1.Text;
+            String last_char = str.Substring(str.Length - 1, 1);
+            if (last_char == ".")
+            {
+                textBox1.Text = str;
+            }else
+            {
+                textBox1.Text = str + ".";
+            }
+            textBox1.Focus();
         }
 
         private void button14_Click(object sender, EventArgs e)
@@ -81,12 +97,13 @@ namespace Calculator
             {
                 textBox1.Text = str + "/";
             }
+            textBox1.Focus();
         }
 
         private void button10_Click(object sender, EventArgs e)
         {
             String str = textBox1.Text;
-            if (str[0].ToString() == "0" && textBox1.Text.Length == 1)
+            if ((str[0].ToString() == "0" && textBox1.Text.Length == 1) || str.Contains('='))
             {
                 //expression_str不可以是多个0开头的数字
                 textBox1.Text = "0";
@@ -95,13 +112,14 @@ namespace Calculator
             {
                 textBox1.AppendText("0");
             }
+            textBox1.Focus();
         }
 
 
         private void button2_Click(object sender, EventArgs e)
         {
             String str = textBox1.Text;
-            if (str[0].ToString() == "0" && textBox1.Text.Length == 1)
+            if ((str[0].ToString() == "0" && textBox1.Text.Length == 1) || str.Contains('='))
             {
                 //expression_str不可以是多个0开头的数字
                 textBox1.Text = "2";
@@ -110,12 +128,13 @@ namespace Calculator
             {
                 textBox1.AppendText("2");
             }
+            textBox1.Focus();
         }
 
         private void button3_Click(object sender, EventArgs e)
         {
             String str = textBox1.Text;
-            if (str[0].ToString() == "0" && textBox1.Text.Length == 1)
+            if ((str[0].ToString() == "0" && textBox1.Text.Length == 1) || str.Contains('='))
             {
                 //expression_str不可以是多个0开头的数字
                 textBox1.Text = "3";
@@ -124,12 +143,13 @@ namespace Calculator
             {
                 textBox1.AppendText("3");
             }
+            textBox1.Focus();
         }
 
         private void button4_Click(object sender, EventArgs e)
         {
             String str = textBox1.Text;
-            if (str[0].ToString() == "0" && textBox1.Text.Length == 1)
+            if ((str[0].ToString() == "0" && textBox1.Text.Length == 1) || str.Contains('='))
             {
                 //expression_str不可以是多个0开头的数字
                 textBox1.Text = "4";
@@ -138,12 +158,13 @@ namespace Calculator
             {
                 textBox1.AppendText("4");
             }
+            textBox1.Focus();
         }
 
         private void button5_Click(object sender, EventArgs e)
         {
             String str = textBox1.Text;
-            if (str[0].ToString() == "0" && textBox1.Text.Length == 1)
+            if ((str[0].ToString() == "0" && textBox1.Text.Length == 1) || str.Contains('='))
             {
                 //expression_str不可以是多个0开头的数字
                 textBox1.Text = "5";
@@ -152,12 +173,13 @@ namespace Calculator
             {
                 textBox1.AppendText("5");
             }
+            textBox1.Focus();
         }
 
         private void button6_Click(object sender, EventArgs e)
         {
             String str = textBox1.Text;
-            if (str[0].ToString() == "0" && textBox1.Text.Length == 1)
+            if ((str[0].ToString() == "0" && textBox1.Text.Length == 1) || str.Contains('='))
             {
                 //expression_str不可以是多个0开头的数字
                 textBox1.Text = "6";
@@ -166,12 +188,13 @@ namespace Calculator
             {
                 textBox1.AppendText("6");
             }
+            textBox1.Focus();
         }
 
         private void button7_Click(object sender, EventArgs e)
         {
             String str = textBox1.Text;
-            if (str[0].ToString() == "0" && textBox1.Text.Length == 1)
+            if ((str[0].ToString() == "0" && textBox1.Text.Length == 1) || str.Contains('='))
             {
                 //expression_str不可以是多个0开头的数字
                 textBox1.Text = "7";
@@ -180,12 +203,13 @@ namespace Calculator
             {
                 textBox1.AppendText("7");
             }
+            textBox1.Focus();
         }
 
         private void button8_Click(object sender, EventArgs e)
         {
             String str = textBox1.Text;
-            if (str[0].ToString() == "0" && textBox1.Text.Length == 1)
+            if ((str[0].ToString() == "0" && textBox1.Text.Length == 1) || str.Contains('='))
             {
                 //expression_str不可以是多个0开头的数字
                 textBox1.Text = "8";
@@ -194,6 +218,7 @@ namespace Calculator
             {
                 textBox1.AppendText("8");
             }
+            textBox1.Focus();
         }
 
         private void button11_Click(object sender, EventArgs e)
@@ -210,6 +235,7 @@ namespace Calculator
             {
                 textBox1.Text = str + "+";
             }
+            textBox1.Focus();
         }
 
         private void button12_Click(object sender, EventArgs e)
@@ -226,6 +252,7 @@ namespace Calculator
             {
                 textBox1.Text = str + "-";
             }
+            textBox1.Focus();
         }
 
         private void button13_Click(object sender, EventArgs e)
@@ -242,61 +269,30 @@ namespace Calculator
             {
                 textBox1.Text = str + "*";
             }
+            textBox1.Focus();
         }
 
         private void button17_Click(object sender, EventArgs e)
         {
             textBox1.Text = "0";
+            textBox1.Focus();
         }
 
         private void button19_Click_1(object sender, EventArgs e)
         {
-        }
-
-        private void button20_Click(object sender, EventArgs e)
-        {
-            String str = textBox1.Text;
-            if (str[0].ToString() == "0" && textBox1.Text.Length == 1)
-            {
-                //expression_str不可以是多个0开头的数字
-                textBox1.Text = "(";
-            }
-            else
-            {
-                textBox1.AppendText("(");
-            }
-        }
-
-        private void button21_Click(object sender, EventArgs e)
-        {
-            String str = textBox1.Text;
-            if (str[0].ToString() == "0" && textBox1.Text.Length == 1)
-            {
-                //expression_str不可以是多个0开头的数字
-                textBox1.Text = ")";
-            }
-            else
-            {
-                textBox1.AppendText(")");
-            }
-        }
-
-        private void Form1_KeyDown(object sender, KeyEventArgs e)
-        {
-            e.SuppressKeyPress = true;
             String expression_str = textBox1.Text;
             List<Oper> expression_list = new List<Oper>();
             String number_tmp = "";
-            String OPERAND = "0123456789.";
-            String OPERATORS = "+-*/()";
-            Regex reg_operand_int = new Regex(@"^[1-9][0-9]*$");
-            Regex reg_operand_decimal = new Regex(@"^[0-9]{1,}[.][0-9]*$");
-            Regex reg_operator = new Regex(@"^[\+\-\*/]$");
 
             ///<summary>
             ///表达式string转换成包含操作数+操作符的list
             ///<summary>
+            Char first_char = expression_str[0];
             Char last_char = expression_str[expression_str.Length - 1];
+            if (first_char == '+' || first_char == '-')
+            {
+                expression_str = '0' + expression_str;
+            }
             if (last_char == '+' || last_char == '-' || last_char == '*' || last_char == '/')
             {
                 expression_str = expression_str.Remove(expression_str.Length - 1, 1);
@@ -388,12 +384,12 @@ namespace Calculator
                 }
             }
 
+            //输入数据已经读到末尾，栈中所有操作符出栈
             while (s.Count != 0)
             {
                 expression_post_list.Add(s.Pop());
             }
 
-            //输入数据已经读到末尾，栈中所有操作符出栈
             Console.WriteLine(">>> Post: {0}", string.Join(",", expression_post_list));
             Console.WriteLine();
             foreach (Oper item in expression_post_list)
@@ -418,7 +414,7 @@ namespace Calculator
                     OperandDbl a = (OperandDbl)stk.Pop();
                     OperandDbl b = (OperandDbl)stk.Pop();
                     OperatorItem o = (OperatorItem)expression_post_list[j];
-                    double mid_result = o.Calculate(a, b);
+                    double mid_result = o.Calculate(b, a);
                     stk.Push(new OperandDbl(mid_result.ToString()));
                 }
                 else
@@ -427,7 +423,52 @@ namespace Calculator
                     textBox1.Text = "出错";
                 }
             }
-            textBox1.Text = stk.Pop().ToString();
+            result = stk.Pop().ToString();
+            textBox1.Text = expression_str + "=" + result;
+            textBox1.Focus();
         }
+
+        private void button20_Click(object sender, EventArgs e)
+        {
+            String str = textBox1.Text;
+            if (str[0].ToString() == "0" && textBox1.Text.Length == 1)
+            {
+                //expression_str不可以是多个0开头的数字
+                textBox1.Text = "(";
+            }
+            else
+            {
+                textBox1.AppendText("(");
+            }
+            textBox1.Focus();
+        }
+
+        private void button21_Click(object sender, EventArgs e)
+        {
+            String str = textBox1.Text;
+            if (str[0].ToString() == "0" && textBox1.Text.Length == 1)
+            {
+                //expression_str不可以是多个0开头的数字
+                textBox1.Text = ")";
+            }
+            else
+            {
+                textBox1.AppendText(")");
+            }
+            textBox1.Focus();
+        }
+
+        private void textBox1_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                button19_Click_1(sender, e);
+            }
+            else
+            {
+                return;
+            }
+        }
+            
     }
 }

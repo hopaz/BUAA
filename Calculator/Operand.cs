@@ -9,7 +9,6 @@ namespace Calculator
     interface IOperand
     {
         double ToDouble();
-        bool IsValid();
     }
 
     public abstract class OperandItem : Oper, IOperand
@@ -19,14 +18,9 @@ namespace Calculator
         {
             this.Value = val;
         }
-        public double ToDouble()
+        public double ToDouble()        
         {
             return Double.Parse(this.Value);
-        }
-
-        public bool IsValid()
-        {
-            return true;
         }
 
         public override string ToString()
