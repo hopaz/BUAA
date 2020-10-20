@@ -1,7 +1,6 @@
 D:\BUAA\SpeechProcessing\SpeechProcessing\bin\Debug\SpeechProcessing.exe.config
 D:\BUAA\SpeechProcessing\SpeechProcessing\bin\Debug\SpeechProcessing.exe
 D:\BUAA\SpeechProcessing\SpeechProcessing\bin\Debug\SpeechProcessing.pdb
-D:\BUAA\SpeechProcessing\SpeechProcessing\bin\Debug\AipSdk.dll
 D:\BUAA\SpeechProcessing\SpeechProcessing\bin\Debug\Newtonsoft.Json.dll
 D:\BUAA\SpeechProcessing\SpeechProcessing\bin\Debug\AipSdk.pdb
 D:\BUAA\SpeechProcessing\SpeechProcessing\obj\Debug\SpeechProcessing.csprojResolveAssemblyReference.cache
@@ -10,3 +9,4 @@ D:\BUAA\SpeechProcessing\SpeechProcessing\obj\Debug\SpeechProcessing.Properties.
 D:\BUAA\SpeechProcessing\SpeechProcessing\obj\Debug\SpeechProcessing.csproj.GenerateResource.Cache
 D:\BUAA\SpeechProcessing\SpeechProcessing\obj\Debug\SpeechProcessing.exe
 D:\BUAA\SpeechProcessing\SpeechProcessing\obj\Debug\SpeechProcessing.pdb
+D:\BUAA\SpeechProcessing\SpeechProcessing\bin\Debug\AipSdk.dll
