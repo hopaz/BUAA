@@ -10,76 +10,89 @@ using System.Windows.Forms;
 using System.Net.Http;
 using System.IO;
 using Newtonsoft.Json.Linq;
+using System.Runtime.InteropServices;
 
 namespace SpeechProcessing
 {
     public partial class Form1 : Form
     {
+
+        [DllImport("winmm.dll", SetLastError = true)]
+        static extern long mciSendString(string strCommand, StringBuilder strReturn, int iReturnLength, IntPtr hwndCallback);
+
+        private void playSound(string audioPath)
+        {
+            // 播放音频文件
+            mciSendString("open " + audioPath + " alias temp_alias", null, 0, IntPtr.Zero);
+            mciSendString("play temp_alias", null, 0, IntPtr.Zero);
+
+            // 等待播放结束
+            StringBuilder strReturn = new StringBuilder(64);
+            do
+            {
+                mciSendString("status temp_aliasmode", strReturn, 64, IntPtr.Zero);
+            } while (!strReturn.ToString().Contains("stopped"));
+
+            // 关闭音频文件
+            mciSendString("close temp_alias", null, 0, IntPtr.Zero);
+        }
+
         public Form1()
         {
             InitializeComponent();
         }
 
-        private void button3_Click(object sender, EventArgs e)
+        private void btn_FileDialog_Click(object sender, EventArgs e)
         {
             //选择文件按钮
             OpenFileDialog dialog = new OpenFileDialog();
             if (dialog.ShowDialog() == DialogResult.OK)
             {
-                this.textBox1.SelectedText = dialog.FileName;
+                this.txtAudioPath.Text = dialog.FileName;
             }
         }
 
-        // 调用getAccessToken()获取的 access_token建议根据expires_in 时间 设置缓存
-        // 百度云中开通对应服务应用的 API Key 建议开通应用的时候多选服务
-        private static String API_KEY = "ZiUC7H5c7Fkdan8n6Xj5vG3t";
-        // 百度云中开通对应服务应用的 Secret Key
-        private static String SECRET_KEY = "ZAV5r9h6BhmIeSa5zYx2L4plskh7IcsD";
-        
-        private void button2_Click(object sender, EventArgs e)
+        private void btn_Recognize_Click(object sender, EventArgs e)
         {
             //开始识别按钮
             //请求语音识别接口
-            var data = File.ReadAllBytes(textBox1.Text);
-            var options = new Dictionary<string, object>{
-                {"dev_pid", 1537}
-            };
-            var client = new Baidu.Aip.Speech.Asr(API_KEY, SECRET_KEY);
-            client.Timeout = 60000;
-            Console.Write(this.audio_format.Text);
-            JObject result = new JObject();
-            switch(this.audio_format.Text){
-                case "pcm":
-                    result = client.Recognize(data, "pcm", 16000, options);
-                    break;
-                case "wav":
-                    result = client.Recognize(data, "wav", 16000, options);
-                    break;
-                case "amr":
-                    result = client.Recognize(data, "amr", 16000, options);
-                    break;
-                case "m4a":
-                    result = client.Recognize(data, "m4a", 16000, options);
-                    break;
-            }
-            this.recog_result.Text = result.ToString();
+            var audioPath = this.txtAudioPath.Text;
+            var audioFormat = this.comboAudioFormat.Text;
+            var modelType = this.comboModelType.Text;
+            var client = BaiduSpeechManager.GetInstance();
+            var result = client.Recognize(audioPath, audioFormat);
+            this.txtRecogResult.Text = result;
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void btn_Synthesis_Click(object sender, EventArgs e)
         {
-            var client = new Baidu.Aip.Speech.Tts(API_KEY, SECRET_KEY);
-            client.Timeout = 60000;  // 修改超时时间
-            var option = new Dictionary<string, object>()
+            //开始合成按钮
+            var text = this.txtSynthesisInput.Text;
+            var audioPath = @".\合成的语音.mp3";
+            var client = BaiduSpeechManager.GetInstance();
+            var pit = (int)this.numPit.Value;
+            var spd = (int)this.numSpd.Value;
+            var vol = (int)this.numVol.Value;
+            var perDict = new Dictionary<string, int>()
             {
-                {"spd", 5}, // 语速
-                {"vol", 7}, // 音量
-                {"per", 4}  // 发音人，4：情感度丫丫童声
+                {"度小宇", 1},
+                {"度小美", 0},
+                {"度逍遥", 3},
+                {"度丫丫", 4},
             };
-            var result = client.Synthesis(this.synthesis_input.Text, option);
-            if (result.ErrorCode == 0)  // 或 result.Success
+            var per = perDict[this.comboPer.Text];
+
+            var aueDict = new Dictionary<string, int>()
             {
-                File.WriteAllBytes(@"D:\BUAA\SpeechProcessing\samples\合成的语音.mp3", result.Data);
-            }
+                {"mp3", 3},
+                {"pcm-16k", 4},
+                {"pcm-8k", 5},
+                {"wav", 6},
+            };
+            var aue = aueDict[this.comboAue.Text];
+            File.Delete(audioPath);
+            client.Synthesis(spd, pit, vol, per, aue, text, audioPath);
+            playSound(audioPath);
         }
     }
 }

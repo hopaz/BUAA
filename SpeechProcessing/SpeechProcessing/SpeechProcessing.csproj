@@ -34,11 +34,11 @@
   <ItemGroup>
     <Reference Include="AipSdk, Version=3.4.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\Users\zhangjingjing1\Downloads\aip-csharp-sdk-3.4.0\net45\AipSdk.dll</HintPath>
+      <HintPath>C:\Users\hoppaz\Downloads\aip-csharp-sdk-3.4.0\net45\AipSdk.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>C:\Users\zhangjingjing1\Downloads\aip-csharp-sdk-3.4.0\net45\Newtonsoft.Json.dll</HintPath>
+      <HintPath>C:\Users\hoppaz\Downloads\aip-csharp-sdk-3.4.0\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -53,6 +53,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BaiduSpeechManager.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
