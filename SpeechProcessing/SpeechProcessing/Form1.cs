@@ -60,19 +60,13 @@ namespace SpeechProcessing
             var audioFormat = this.comboAudioFormat.Text;
             var modelType = this.comboModelType.Text;
             var client = BaiduSpeechManager.GetInstance();
-            var result = client.Recognize(audioPath, audioFormat);
+            var result = client.Recognize(audioPath, audioFormat, modelType);
             this.txtRecogResult.Text = result;
         }
 
         private void btn_Synthesis_Click(object sender, EventArgs e)
         {
             //开始合成按钮
-            var text = this.txtSynthesisInput.Text;
-            var audioPath = @".\合成的语音.mp3";
-            var client = BaiduSpeechManager.GetInstance();
-            var pit = (int)this.numPit.Value;
-            var spd = (int)this.numSpd.Value;
-            var vol = (int)this.numVol.Value;
             var perDict = new Dictionary<string, int>()
             {
                 {"度小宇", 1},
@@ -82,6 +76,10 @@ namespace SpeechProcessing
             };
             var per = perDict[this.comboPer.Text];
 
+            var spd = (int)this.numSpd.Value;
+            var pit = (int)this.numPit.Value;
+            var vol = (int)this.numVol.Value;
+
             var aueDict = new Dictionary<string, int>()
             {
                 {"mp3", 3},
@@ -90,9 +88,29 @@ namespace SpeechProcessing
                 {"wav", 6},
             };
             var aue = aueDict[this.comboAue.Text];
-            File.Delete(audioPath);
-            client.Synthesis(spd, pit, vol, per, aue, text, audioPath);
+            var text = this.txtSynthesisInput.Text;
+
+            var audioPath = @"";
+            switch (this.comboAue.Text)
+            {
+                case "mp3":
+                    audioPath = @"..\..\..\samples"+ @"\输出合成的语音" + @".mp3";
+                    break;
+                case "pcm-16k":
+                    audioPath = @".\合成的语音" + ".pcm";
+                    break;
+                case "pcm-8k":
+                    audioPath = @".\合成的语音" + ".pcm";
+                    break;
+                case "wav":
+                    audioPath = @".\合成的语音" + ".wav";
+                    break;
+            }
+
+            var client = BaiduSpeechManager.GetInstance();
+            client.Synthesis(per, spd, pit, vol, aue, text, audioPath);
             playSound(audioPath);
+            File.Delete(audioPath);
         }
     }
 }

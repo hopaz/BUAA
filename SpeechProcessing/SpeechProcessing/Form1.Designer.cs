@@ -42,7 +42,7 @@
             this.comboAue = new System.Windows.Forms.ComboBox();
             this.label8 = new System.Windows.Forms.Label();
             this.comboPer = new System.Windows.Forms.ComboBox();
-            this.btnSyntheis = new System.Windows.Forms.Button();
+            this.btnSynthesis = new System.Windows.Forms.Button();
             this.numVol = new System.Windows.Forms.NumericUpDown();
             this.numPit = new System.Windows.Forms.NumericUpDown();
             this.numSpd = new System.Windows.Forms.NumericUpDown();
@@ -177,7 +177,7 @@
             this.groupBox2.Controls.Add(this.comboAue);
             this.groupBox2.Controls.Add(this.label8);
             this.groupBox2.Controls.Add(this.comboPer);
-            this.groupBox2.Controls.Add(this.btnSyntheis);
+            this.groupBox2.Controls.Add(this.btnSynthesis);
             this.groupBox2.Controls.Add(this.numVol);
             this.groupBox2.Controls.Add(this.numPit);
             this.groupBox2.Controls.Add(this.numSpd);
@@ -231,15 +231,15 @@
             this.comboPer.TabIndex = 13;
             this.comboPer.Text = "度逍遥";
             // 
-            // btnSyntheis
+            // btnSynthesis
             // 
-            this.btnSyntheis.Location = new System.Drawing.Point(188, 349);
-            this.btnSyntheis.Name = "btnSyntheis";
-            this.btnSyntheis.Size = new System.Drawing.Size(75, 23);
-            this.btnSyntheis.TabIndex = 12;
-            this.btnSyntheis.Text = "开始合成";
-            this.btnSyntheis.UseVisualStyleBackColor = true;
-            this.btnSyntheis.Click += new System.EventHandler(this.btn_Synthesis_Click);
+            this.btnSynthesis.Location = new System.Drawing.Point(188, 349);
+            this.btnSynthesis.Name = "btnSynthesis";
+            this.btnSynthesis.Size = new System.Drawing.Size(75, 23);
+            this.btnSynthesis.TabIndex = 12;
+            this.btnSynthesis.Text = "开始合成";
+            this.btnSynthesis.UseVisualStyleBackColor = true;
+            this.btnSynthesis.Click += new System.EventHandler(this.btn_Synthesis_Click);
             // 
             // numVol
             // 
@@ -410,7 +410,7 @@
         private System.Windows.Forms.NumericUpDown numVol;
         private System.Windows.Forms.NumericUpDown numPit;
         private System.Windows.Forms.ComboBox comboPer;
-        private System.Windows.Forms.Button btnSyntheis;
+        private System.Windows.Forms.Button btnSynthesis;
         private System.Windows.Forms.ComboBox comboAue;
         private System.Windows.Forms.Label label8;
     }

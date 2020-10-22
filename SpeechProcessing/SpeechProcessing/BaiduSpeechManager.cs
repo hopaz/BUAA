@@ -38,37 +38,53 @@ namespace SpeechProcessing
         }
 
         // 语音识别
-        public string Recognize(string audioPath, string audioFormat)
+        public string Recognize(string audioPath, string audioFormat, string modleType)
         {
-            var enableFormat = new HashSet<string> { "pcm", "wav", "amr", "mp3" };
-            if (!enableFormat.Contains(audioFormat))
-            {
-                return null;
-            }
-            //开始识别按钮
-            //请求语音识别接口
             var data = File.ReadAllBytes(audioPath);
-            var options = new Dictionary<string, object>{
-                {"dev_pid", 1537}
-            };
+            var enableFormat = new HashSet<string> { "pcm", "wav", "amr", "mp3" };
+            //if (!enableFormat.Contains(audioFormat))
+            //{
+            //    return null;
+            //}
+            //请求语音识别接口
+            var options = new Dictionary<string, object>();
+            switch (modleType)
+            {
+                case "输入法模型":
+                    options["dev_pid"] = 1537;
+                    break;
+                case "英语模型":
+                    options["dev_pid"] = 1737;
+                    break;
+                case "粤语模型":
+                    options["dev_pid"] = 1637;
+                    break;
+                case "四川话模型":
+                    options["dev_pid"] = 1837;
+                    break;
+                case "远场模型":
+                    options["dev_pid"] = 1936;
+                    break;
+            }
 
             var result = this.asrClient.Recognize(data, audioFormat, 16000, options);
             return result.ToString();
         }
 
         // 语音合成
-        public bool Synthesis(int spd, int pit, int vol, int per, int aue, string text, string audioPath)
+        public bool Synthesis(int per, int spd, int pit, int vol, int aue, string text, string audioPath)
         {
-            var pieces = this.splitTextBy2048(text);
             // 可选参数
             var option = new Dictionary<string, object>()
             {
+                {"per", per}, // 音库，度小宇=1，度小美=0，度逍遥（基础）=3，度丫丫=4
                 {"spd", spd}, // 语速，取值0-15，默认为5中语速
                 {"pit", pit}, // 语调，取值0-15，默认为5中语调
                 {"vol", vol}, // 音量，取值0-15，默认为5中音量
-                {"per", per}, // 音库，度小宇=1，度小美=0，度逍遥（基础）=3，度丫丫=4
                 {"aue", aue}, // 格式，3为mp3格式(默认)； 4为pcm-16k；5为pcm-8k；6为wav（内容同pcm-16k）; 
             };
+
+            var pieces = this.splitTextBy2048(text);
             var writer = new System.IO.FileStream(audioPath, System.IO.FileMode.Append);
             // 将上面的语音合并(只支持 mp3)
             for (int i = 0; i < pieces.Count; i++)
