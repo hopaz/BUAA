@@ -30,7 +30,7 @@ namespace SpeechProcessing
             StringBuilder strReturn = new StringBuilder(64);
             do
             {
-                mciSendString("status temp_alias mode", strReturn, 64, IntPtr.Zero);
+                mciSendString("status temp_aliasmode", strReturn, 64, IntPtr.Zero);
             } while (!strReturn.ToString().Contains("stopped"));
 
             // 关闭音频文件
@@ -90,16 +90,27 @@ namespace SpeechProcessing
             var aue = aueDict[this.comboAue.Text];
             var text = this.txtSynthesisInput.Text;
 
-            var audioSuffix = this.comboAue.Text.Split('-')[0];
-            var audioPath = @".\samples\合成的语音." + audioSuffix;
+            var audioPath = @"";
+            switch (this.comboAue.Text)
+            {
+                case "mp3":
+                    audioPath = @"..\..\..\samples"+ @"\输出合成的语音" + @".mp3";
+                    break;
+                case "pcm-16k":
+                    audioPath = @".\合成的语音" + ".pcm";
+                    break;
+                case "pcm-8k":
+                    audioPath = @".\合成的语音" + ".pcm";
+                    break;
+                case "wav":
+                    audioPath = @".\合成的语音" + ".wav";
+                    break;
+            }
 
             var client = BaiduSpeechManager.GetInstance();
-            File.Delete(audioPath);
             client.Synthesis(per, spd, pit, vol, aue, text, audioPath);
-            if (audioSuffix != "pcm")
-            {
-                playSound(audioPath);
-            }
+            playSound(audioPath);
+            File.Delete(audioPath);
         }
     }
 }
