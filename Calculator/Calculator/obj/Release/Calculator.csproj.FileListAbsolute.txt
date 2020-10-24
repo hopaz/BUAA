@@ -1,9 +1,0 @@
-D:\BUAA\Calculator\bin\Release\Calculator.exe.config
-D:\BUAA\Calculator\bin\Release\Calculator.exe
-D:\BUAA\Calculator\bin\Release\Calculator.pdb
-D:\BUAA\Calculator\obj\Release\Calculator.Form1.resources
-D:\BUAA\Calculator\obj\Release\Calculator.Properties.Resources.resources
-D:\BUAA\Calculator\obj\Release\Calculator.csproj.GenerateResource.Cache
-D:\BUAA\Calculator\obj\Release\Calculator.exe
-D:\BUAA\Calculator\obj\Release\Calculator.pdb
-D:\BUAA\Calculator\obj\Release\Calculator.csprojResolveAssemblyReference.cache
