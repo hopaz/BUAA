@@ -161,13 +161,13 @@ namespace nlp
             };
             var options = new Dictionary<string, object>{
                     {"mode", dictMode[comboBoxSyntacParse.Text.ToString()]}};
-            JObject result = client.DepParser(textBoxLexiAnaly.Text, options);
+            var result = client.DepParser(textBoxLexiAnaly.Text, options);
 
             Console.WriteLine(result);
 	        //JToken[] itemArr = result.GetValue("items").ToArray();
 
             int resutl_len = result["items"].Count();
-            foreach(var item in result["items"])
+            foreach(JObject item in result["items"])
             {
                 TreeNode node = new TreeNode();
                 node.Text = item["word"] + "(" + DEPRELTABLE[item["deprel"].ToString()] + ")";
