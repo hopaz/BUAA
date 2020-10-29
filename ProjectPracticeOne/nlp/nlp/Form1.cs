@@ -104,6 +104,22 @@ namespace nlp
                                                {"WP", "标点"},
                                                {"",""}};
 
+        // 评论观点类型表
+        private readonly Dictionary<string, int> COMMENTTYPETABLE =
+            new Dictionary<string, int>() {{"酒店", 1},
+                                            {"KTV", 2},
+                                            {"丽人", 3},
+                                            {"美食餐饮", 4},
+                                            {"旅游", 5},
+                                            {"健康", 6},
+                                            {"教育", 7},
+                                            {"商业", 8},
+                                            {"房产", 9},
+                                            {"汽车", 10},
+                                            {"生活", 11},
+                                            {"购物", 12},
+                                            {"3C", 13}};
+
         private static string APIKEY = "Lo2Ah5Dyeij2HdC7zKK208EA";
         private static string APISECRET = "pS5MwT63vfzHHC9ria3AeoIaIzKbHsg0";
         private static Nlp client = new Nlp(APIKEY, APISECRET);
@@ -115,7 +131,11 @@ namespace nlp
 
         private void buttonLexiAnaly_Click(object sender, EventArgs e)
         {
-            //调用百度API
+            //词法分析
+            if (textBoxLexiAnaly.TextLength == 0)
+            {
+                MessageBox.Show("textBoxLexiAnaly" + "shouldn't be empty!");
+            }
             try
             {
                 JObject result = client.Lexer(textBoxLexiAnaly.Text);
@@ -155,109 +175,252 @@ namespace nlp
         private void buttonSyntacParse_Click(object sender, EventArgs e)
         {
             //依存句法分析
+            if (textBoxLexiAnaly.TextLength == 0)
+            {
+                MessageBox.Show("textBoxLexiAnaly" + "shouldn't be empty!");
+            }
             var dictMode = new Dictionary<string, int>{
 	            {"web模型", 0},
                 {"query模型", 1}
             };
             var options = new Dictionary<string, object>{
                     {"mode", dictMode[comboBoxSyntacParse.Text.ToString()]}};
-            var result = client.DepParser(textBoxLexiAnaly.Text, options);
-
-            Console.WriteLine(result);
-	        //JToken[] itemArr = result.GetValue("items").ToArray();
-
-            int resutl_len = result["items"].Count();
-            foreach(JObject item in result["items"])
+            try
             {
-                TreeNode node = new TreeNode();
-                node.Text = item["word"] + "(" + DEPRELTABLE[item["deprel"].ToString()] + ")";
+                var result = client.DepParser(textBoxLexiAnaly.Text, options);
+                Console.WriteLine(result);
+                //JToken[] itemArr = result.GetValue("items").ToArray();
+
+                // treeView展示结果，待更新
+                int resutl_len = result["items"].Count();
+                foreach (JObject item in result["items"])
+                {
+                    TreeNode node = new TreeNode();
+                    node.Text = item["word"] + "(" + DEPRELTABLE[item["deprel"].ToString()] + ")";
 
 
+                }
             }
-
-
-
+            catch (Exception exp){
+                MessageBox.Show(exp.Message);
+                return;
+            }
         }
 
         private void buttonDNN_Click(object sender, EventArgs e)
         {
+            //DNN语言模型
+            if (textBoxLexiAnaly.TextLength == 0)
+            {
+                MessageBox.Show("textBoxLexiAnaly" + "shouldn't be empty!");
+            }
             int index = 1;
             var text = textBoxLexiAnaly.Text;
-            // try...catch
-            var result = client.DnnlmCn(text);
-            Console.WriteLine(result);
-            foreach (var item in result["items"]){
-                listViewDNN.Items.Add(new ListViewItem(new string[]{
+            try
+            {
+                var result = client.DnnlmCn(text);
+                Console.WriteLine(result);
+                foreach (var item in result["items"])
+                {
+                    listViewDNN.Items.Add(new ListViewItem(new string[]{
                     index++.ToString(),
                     item["word"].ToString(),
                     item["prob"].ToString()                
                 }));
+                }
+                textBoxPpl.Text = result["ppl"].ToString();
             }
-            textBoxPpl.Text = result["ppl"].ToString();
+            catch (Exception exp)
+            {
+                MessageBox.Show(exp.Message);
+                return;
+            }
         }
 
         private void buttonShortTextSim_Click(object sender, EventArgs e)
         {
-            var options = new Dictionary<string, object> { { "model", comboBoxShortModel.Text } };
-            // try...catch
-            var result = client.Simnet(richTextBoxS1.Text, richTextBoxS2.Text, options);
-            Console.WriteLine(result);
-            textBoxShort.Text = result["score"].ToString();
+            //短文本相似度
+            if (richTextBoxS1.TextLength == 0 || richTextBoxS2.TextLength == 0)
+            {
+                MessageBox.Show("richTextBoxS1 and richTextBoxS2 shouldn't be empty!");
+            }
+            var options = new Dictionary<string, object> { { "model", comboBoxShortModel.Text}};
+            try
+            {
+                var result = client.Simnet(richTextBoxS1.Text, richTextBoxS2.Text, options);
+                Console.WriteLine(result);
+                textBoxShort.Text = result["score"].ToString();
+            }
+            catch (Exception exp)
+            {
+                MessageBox.Show(exp.Message);
+                return;
+            }
         }
 
         private void buttonComment_Click(object sender, EventArgs e)
         {
-            var options = new Dictionary<string, object> { { "type", comboBoxComment.Text } };
-            // try...catch
-            var result = client.CommentTag(richTextBoxComment.Text, options);
-            Console.WriteLine(result);
-            //按行展示
-            richTextBoxCommentResult.Text = result["items"].ToString();
+            //评论观点抽取
+            if (richTextBoxComment.TextLength == 0)
+            {
+                MessageBox.Show("richTextBoxComment shouldn't be empty!");
+            }
+            var options = new Dictionary<string, object> { 
+                            { "type", COMMENTTYPETABLE[comboBoxComment.Text] } };
+            try
+            {
+                var result = client.CommentTag(richTextBoxComment.Text, options);
+                //按行展示
+                Dictionary<int, string> dict_sentiment = new Dictionary<int, string>{
+                    {0, "消极"},
+                    {1, "中性"},
+                    {2, "积极"}
+                 };
+                richTextBoxCommentResult.Clear();
+                foreach (var item in result["items"]) {
+                    richTextBoxCommentResult.AppendText("观点倾向：" +
+                        dict_sentiment[(int)item["sentiment"]] + "\n");
+                    richTextBoxCommentResult.AppendText("短句摘要：" + item["abstract"] + "\n");
+                    richTextBoxCommentResult.AppendText("匹配属性词：" + item["prop"] + "\n");
+                    richTextBoxCommentResult.AppendText("匹配描述词：" + item["adj"] + "\n");
+                    richTextBoxCommentResult.AppendText("开始位置：" + item["begin_pos"] + "\n");
+                    richTextBoxCommentResult.AppendText("结束位置：" + item["end_pos"] + "\n");
+                }
+            }
+            catch (Exception exp)
+            {
+                MessageBox.Show(exp.Message);
+                return;
+            }
         }
 
         private void buttonSentiment_Click(object sender, EventArgs e)
         {
-            // try...catch
-            var result = client.SentimentClassify(richTextBoxComment.Text);
-            Console.WriteLine(result);
-            //按行展示
-            richTextBoxCommentResult.Text = result["items"].ToString();
+            //情感倾向分析
+            if (richTextBoxComment.TextLength == 0)
+            {
+                MessageBox.Show("richTextBoxComment shouldn't be empty!");
+            }
+            try
+            {
+                var result = client.SentimentClassify(richTextBoxComment.Text);
+                Dictionary<int, string> dict_sentiment = new Dictionary<int, string>{
+                    {0, "消极"},
+                    {1, "中性"},
+                    {2, "积极"}
+                 };
+                richTextBoxCommentResult.Clear();
+                foreach (var item in result["items"])
+                {
+                    richTextBoxCommentResult.AppendText("观点倾向：" +
+                        dict_sentiment[(int)item["sentiment"]] + "\n");
+                    richTextBoxCommentResult.AppendText("分类的置信度：" + item["confidence"] + "\n");
+                    richTextBoxCommentResult.AppendText("积极类别的概率：" + item["positive_prob"] + "\n");
+                    richTextBoxCommentResult.AppendText("消极类别的概率：" + item["negative_prob"] + "\n");
+                }
+            }
+            catch (Exception exp)
+            {
+                MessageBox.Show(exp.Message);
+                return;
+            }
         }
 
         private void buttonWordEmbed_Click(object sender, EventArgs e)
         {
-            // try...catch
-            var result = client.WordEmbedding(textBoxWordEmbed.Text);
-            Console.WriteLine(result);
-            //按行展示
-            richTextBoxWordEmbed.Text = result["vec"].ToString();
+            //词向量分析
+            if (textBoxWordEmbed.TextLength == 0)
+            {
+                MessageBox.Show("textBoxWordEmbed shouldn't be empty!");
+            }
+            
+            try
+            {
+                var result = client.WordEmbedding(textBoxWordEmbed.Text);
+                richTextBoxWordEmbed.Clear();
+                foreach(var item in result["vec"]){
+                    richTextBoxWordEmbed.AppendText(item.ToString() + "\n");
+                }
+            }
+            catch (Exception exp)
+            {
+                MessageBox.Show(exp.Message);
+                return;
+            }
         }
 
         private void buttonWordSimEnbed_Click(object sender, EventArgs e)
         {
-            // try...catch
-            var result = client.WordSimEmbedding(textBoxWordSimEnbed1.Text, textBoxWordSimEnbed2.Text);
-            Console.WriteLine(result);
-            //按行展示
-            textBoxWordSimEnbedResult.Text = result["score"].ToString(); 
+            //词义相似度
+            if (textBoxWordSimEnbed1.TextLength == 0 || textBoxWordSimEnbed2.TextLength == 0)
+            {
+                MessageBox.Show("textBoxWordSimEnbed1 and textBoxWordSimEnbed2 shouldn't be empty!");
+            }
+            try
+            {
+                var result = client.WordSimEmbedding(textBoxWordSimEnbed1.Text, textBoxWordSimEnbed2.Text);
+                Console.WriteLine(result);
+                //按行展示
+                textBoxWordSimEnbedResult.Text = result["score"].ToString();
+            }
+            catch (Exception exp)
+            {
+                MessageBox.Show(exp.Message);
+                return;
+            } 
         }
 
         private void buttonKeyword_Click(object sender, EventArgs e)
         {
-            // try...catch
-            var result = client.Keyword(textBoxKeyword.Text, richTextBoxKeyword.Text);
-            Console.WriteLine(result);
-            //按行展示
-            richTextBoxKeyWordResult.Text = result["items"].ToString(); 
+            //文章标签
+            if (textBoxKeyword.TextLength == 0 || richTextBoxKeyword.TextLength == 0)
+            {
+                MessageBox.Show("textBoxKeyword and richTextBoxKeyword shouldn't be empty!");
+            }
+            try
+            {
+                var result = client.Keyword(textBoxKeyword.Text, richTextBoxKeyword.Text);
+                richTextBoxKeyWordResult.Clear();
+                foreach (var item in result["items"]) {
+                    richTextBoxKeyWordResult.AppendText("\t" + item["tag"] + "：" + item["score"] + "\n");
+                }
+            }
+            catch (Exception exp)
+            {
+                MessageBox.Show(exp.Message);
+                return;
+            }
         }
 
         private void buttonTopic_Click(object sender, EventArgs e)
         {
-            // try...catch
-            var result = client.Topic(textBoxKeyword.Text, richTextBoxKeyword.Text);
-            Console.WriteLine(result);
-            //按行展示
-            richTextBoxKeyWordResult.Text = result["item"].ToString(); 
+            //文章分类
+            if (textBoxKeyword.TextLength == 0 || richTextBoxKeyword.TextLength == 0)
+            {
+                MessageBox.Show("textBoxKeyword and richTextBoxKeyword shouldn't be empty!");
+            }
+            try
+            {
+                var result = client.Topic(textBoxKeyword.Text, richTextBoxKeyword.Text);
+                richTextBoxKeyWordResult.Clear();
+                richTextBoxKeyWordResult.AppendText("一级分类结果：\n");
+                foreach (var item in result["item"]["lv1_tag_list"])
+                {
+                    richTextBoxKeyWordResult.AppendText("\t" + item["tag"] + "：" + item["score"] + "\n");
+                }
+                richTextBoxKeyWordResult.AppendText("二级分类结果：\n");
+                foreach (var item in result["item"]["lv2_tag_list"])
+                {
+                    richTextBoxKeyWordResult.AppendText("\t" + item["tag"] + "：" + item["score"] + "\n");
+                }
+
+            }
+            catch (Exception exp)
+            {
+                MessageBox.Show(exp.Message);
+                return;
+            }
         }
+
     }
 }

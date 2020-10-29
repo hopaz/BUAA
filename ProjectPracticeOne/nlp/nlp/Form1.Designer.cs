@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.groupBoxLexiAnaly = new System.Windows.Forms.GroupBox();
+            this.treeViewSyntacParse = new System.Windows.Forms.TreeView();
             this.listViewDNN = new System.Windows.Forms.ListView();
             this.columnHeader5 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader6 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -82,7 +83,6 @@
             this.label8 = new System.Windows.Forms.Label();
             this.textBoxKeyword = new System.Windows.Forms.TextBox();
             this.label7 = new System.Windows.Forms.Label();
-            this.treeViewSyntacParse = new System.Windows.Forms.TreeView();
             this.groupBoxLexiAnaly.SuspendLayout();
             this.groupBoxShortTxt.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -110,6 +110,13 @@
             this.groupBoxLexiAnaly.TabIndex = 0;
             this.groupBoxLexiAnaly.TabStop = false;
             this.groupBoxLexiAnaly.Text = "词法分析/依存句法分析/DNN语言模型";
+            // 
+            // treeViewSyntacParse
+            // 
+            this.treeViewSyntacParse.Location = new System.Drawing.Point(9, 240);
+            this.treeViewSyntacParse.Name = "treeViewSyntacParse";
+            this.treeViewSyntacParse.Size = new System.Drawing.Size(277, 82);
+            this.treeViewSyntacParse.TabIndex = 12;
             // 
             // listViewDNN
             // 
@@ -341,6 +348,7 @@
             // 
             this.richTextBoxCommentResult.Location = new System.Drawing.Point(12, 108);
             this.richTextBoxCommentResult.Name = "richTextBoxCommentResult";
+            this.richTextBoxCommentResult.ReadOnly = true;
             this.richTextBoxCommentResult.Size = new System.Drawing.Size(342, 52);
             this.richTextBoxCommentResult.TabIndex = 18;
             this.richTextBoxCommentResult.Text = "";
@@ -370,7 +378,8 @@
             this.comboBoxComment.FormattingEnabled = true;
             this.comboBoxComment.Items.AddRange(new object[] {
             "酒店",
-            "KTV3 - 丽人",
+            "KTV",
+            "丽人",
             "美食餐饮",
             "旅游",
             "健康",
@@ -581,7 +590,9 @@
             this.richTextBoxKeyword.Name = "richTextBoxKeyword";
             this.richTextBoxKeyword.Size = new System.Drawing.Size(276, 160);
             this.richTextBoxKeyword.TabIndex = 3;
-            this.richTextBoxKeyword.Text = "";
+            this.richTextBoxKeyword.Text = "今年的英雄联盟全球总决赛的比赛可谓是\"最无聊\"的一届比赛，这个无聊并不是说选手们在场上表现的非常一般，比赛观赏度不够，而是在当前版本下，战队只要能在一级团或者前期" +
+    "拿到优势后，后续的比赛几乎没什么悬念！像DWG这种强队，教练组只要在前期能够设计出一波精彩的一级团帮助队伍拿到优势的话，后续的比赛选手通过个人能力就可以完全碾压" +
+    "这场对局，翻盘的可能性几乎为零！";
             // 
             // label8
             // 
@@ -598,6 +609,7 @@
             this.textBoxKeyword.Name = "textBoxKeyword";
             this.textBoxKeyword.Size = new System.Drawing.Size(278, 21);
             this.textBoxKeyword.TabIndex = 1;
+            this.textBoxKeyword.Text = "S10比赛五分钟就分胜负！网友：无聊！";
             // 
             // label7
             // 
@@ -607,13 +619,6 @@
             this.label7.Size = new System.Drawing.Size(53, 12);
             this.label7.TabIndex = 0;
             this.label7.Text = "文章标题";
-            // 
-            // treeViewSyntacParse
-            // 
-            this.treeViewSyntacParse.Location = new System.Drawing.Point(9, 240);
-            this.treeViewSyntacParse.Name = "treeViewSyntacParse";
-            this.treeViewSyntacParse.Size = new System.Drawing.Size(277, 82);
-            this.treeViewSyntacParse.TabIndex = 12;
             // 
             // Form1
             // 
