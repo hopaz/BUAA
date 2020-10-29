@@ -104,34 +104,37 @@ namespace nlp
                                                {"WP", "标点"},
                                                {"",""}};
 
-        private string APIKEY = "Lo2Ah5Dyeij2HdC7zKK208EA";
-        private string APISECRET = "pS5MwT63vfzHHC9ria3AeoIaIzKbHsg0";
+        private static string APIKEY = "Lo2Ah5Dyeij2HdC7zKK208EA";
+        private static string APISECRET = "pS5MwT63vfzHHC9ria3AeoIaIzKbHsg0";
+        private static Nlp client = new Nlp(APIKEY, APISECRET);
 
         public Form1()
         {
             InitializeComponent();
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void buttonLexiAnaly_Click(object sender, EventArgs e)
         {
             //调用百度API
-            try{
-                Nlp client = new Nlp(APIKEY, APISECRET);
-                JObject result = client.Lexer(textBox1.Text);
+            try
+            {
+                JObject result = client.Lexer(textBoxLexiAnaly.Text);
 
                 int index = 1;
                 foreach (var item in result["items"])
                 {
                     StringBuilder sb = new StringBuilder();
-                    foreach (var word in item["basic_words"]){
+                    foreach (var word in item["basic_words"])
+                    {
                         sb.Append(string.Format("{0}/", word.ToString()));
                     }
-                    if(sb.Length != 0){
+                    if (sb.Length != 0)
+                    {
                         sb.Remove(sb.Length - 1, 1);
                     }
 
                     //写入listview
-                    listView1.Items.Add(new ListViewItem(new string[]{
+                    listViewLexiAnaly.Items.Add(new ListViewItem(new string[]{
                         index++.ToString(),
                         item["item"].ToString(),
                         item["pos"].ToString() != string.Empty ?
@@ -140,11 +143,121 @@ namespace nlp
                     }));
                 }
 
-            }catch(Exception exp){
-                MessageBox.Show("出错啦！");
+            }
+            catch (Exception exp)
+            {
+                MessageBox.Show(exp.Message);
                 return;
             }
 
+        }
+
+        private void buttonSyntacParse_Click(object sender, EventArgs e)
+        {
+            //依存句法分析
+            var dictMode = new Dictionary<string, int>{
+	            {"web模型", 0},
+                {"query模型", 1}
+            };
+            var options = new Dictionary<string, object>{
+                    {"mode", dictMode[comboBoxSyntacParse.Text.ToString()]}};
+            JObject result = client.DepParser(textBoxLexiAnaly.Text, options);
+
+            Console.WriteLine(result);
+	        //JToken[] itemArr = result.GetValue("items").ToArray();
+
+            int resutl_len = result["items"].Count();
+            foreach(var item in result["items"])
+            {
+                TreeNode node = new TreeNode();
+                node.Text = item["word"] + "(" + DEPRELTABLE[item["deprel"].ToString()] + ")";
+
+
+            }
+
+
+
+        }
+
+        private void buttonDNN_Click(object sender, EventArgs e)
+        {
+            int index = 1;
+            var text = textBoxLexiAnaly.Text;
+            // try...catch
+            var result = client.DnnlmCn(text);
+            Console.WriteLine(result);
+            foreach (var item in result["items"]){
+                listViewDNN.Items.Add(new ListViewItem(new string[]{
+                    index++.ToString(),
+                    item["word"].ToString(),
+                    item["prob"].ToString()                
+                }));
+            }
+            textBoxPpl.Text = result["ppl"].ToString();
+        }
+
+        private void buttonShortTextSim_Click(object sender, EventArgs e)
+        {
+            var options = new Dictionary<string, object> { { "model", comboBoxShortModel.Text } };
+            // try...catch
+            var result = client.Simnet(richTextBoxS1.Text, richTextBoxS2.Text, options);
+            Console.WriteLine(result);
+            textBoxShort.Text = result["score"].ToString();
+        }
+
+        private void buttonComment_Click(object sender, EventArgs e)
+        {
+            var options = new Dictionary<string, object> { { "type", comboBoxComment.Text } };
+            // try...catch
+            var result = client.CommentTag(richTextBoxComment.Text, options);
+            Console.WriteLine(result);
+            //按行展示
+            richTextBoxCommentResult.Text = result["items"].ToString();
+        }
+
+        private void buttonSentiment_Click(object sender, EventArgs e)
+        {
+            // try...catch
+            var result = client.SentimentClassify(richTextBoxComment.Text);
+            Console.WriteLine(result);
+            //按行展示
+            richTextBoxCommentResult.Text = result["items"].ToString();
+        }
+
+        private void buttonWordEmbed_Click(object sender, EventArgs e)
+        {
+            // try...catch
+            var result = client.WordEmbedding(textBoxWordEmbed.Text);
+            Console.WriteLine(result);
+            //按行展示
+            richTextBoxWordEmbed.Text = result["vec"].ToString();
+        }
+
+        private void buttonWordSimEnbed_Click(object sender, EventArgs e)
+        {
+            // try...catch
+            var result = client.WordSimEmbedding(textBoxWordSimEnbed1.Text, textBoxWordSimEnbed2.Text);
+            Console.WriteLine(result);
+            //按行展示
+            textBoxWordSimEnbedResult.Text = result["score"].ToString(); 
+        }
+
+        private void buttonKeyword_Click(object sender, EventArgs e)
+        {
+            // try...catch
+            var result = client.Keyword(textBoxKeyword.Text, richTextBoxKeyword.Text);
+            Console.WriteLine(result);
+            //按行展示
+            richTextBoxKeyWordResult.Text = result["items"].ToString(); 
+        }
+
+        private void buttonTopic_Click(object sender, EventArgs e)
+        {
+            // try...catch
+            var result = client.Topic(textBoxKeyword.Text, richTextBoxKeyword.Text);
+            Console.WriteLine(result);
+            //按行展示
+            richTextBoxKeyWordResult.Text = result["item"].ToString(); 
         }
     }
 }
