@@ -156,5 +156,5 @@ $RECYCLE.BIN/
 .DS_Store
 
 
-*/venv
-*/.idea
+**/venv
+**/.idea
