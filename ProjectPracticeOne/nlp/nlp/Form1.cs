@@ -162,7 +162,6 @@ namespace nlp
                         sb.ToString()
                     }));
                 }
-
             }
             catch (Exception exp)
             {
@@ -170,6 +169,26 @@ namespace nlp
                 return;
             }
 
+        }
+
+        private void buildTree(JToken root, JToken items)
+        {
+            var children = items.Where(p => p["head"].ToString() == root["id"].ToString()).ToList();
+            foreach (var item in children)
+            {
+                this.insertTreeNode(item);
+                this.buildTree(item, items);
+            }
+        }
+
+        private void insertTreeNode(JToken item)
+        {
+            var text = item["word"] + "(" + DEPRELTABLE[item["deprel"].ToString()] + ")";
+            var parents = this.treeViewSyntacParse.Nodes.Find(item["head"].ToString(), true);
+            if (parents.Count() == 0)
+                this.treeViewSyntacParse.Nodes.Add(item["id"].ToString(), text);
+            else
+                parents[0].Nodes.Add(item["id"].ToString(), text);
         }
 
         private void buttonSyntacParse_Click(object sender, EventArgs e)
@@ -188,18 +207,11 @@ namespace nlp
             try
             {
                 var result = client.DepParser(textBoxLexiAnaly.Text, options);
-                Console.WriteLine(result);
-                //JToken[] itemArr = result.GetValue("items").ToArray();
-
-                // treeView展示结果，待更新
-                int resutl_len = result["items"].Count();
-                foreach (JObject item in result["items"])
-                {
-                    TreeNode node = new TreeNode();
-                    node.Text = item["word"] + "(" + DEPRELTABLE[item["deprel"].ToString()] + ")";
-
-
-                }
+                var items = result["items"];
+                var root = items.First(p => (int)p["head"] == 0);
+                this.insertTreeNode(root);
+                this.buildTree(root, items);
+                treeViewSyntacParse.ExpandAll();
             }
             catch (Exception exp){
                 MessageBox.Show(exp.Message);
@@ -333,7 +345,6 @@ namespace nlp
             {
                 MessageBox.Show("textBoxWordEmbed shouldn't be empty!");
             }
-            
             try
             {
                 var result = client.WordEmbedding(textBoxWordEmbed.Text);
@@ -413,7 +424,6 @@ namespace nlp
                 {
                     richTextBoxKeyWordResult.AppendText("\t" + item["tag"] + "：" + item["score"] + "\n");
                 }
-
             }
             catch (Exception exp)
             {
