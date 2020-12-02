@@ -150,12 +150,31 @@ namespace OCR
             string filePath = textBox1.Text;
             var image = File.ReadAllBytes(filePath);
             var result_id = client.TableRecognitionRequest(image);
-            var result = client.TableRecognitionGetResult(result_id["result"][0]["request_id"].ToString());
 
-            this.rtbForm.Invoke(new Action(() =>
+            for (int i = 0; i < 5; i++)
             {
-                this.rtbForm.Text = result.ToString();
-            }));
+                this.rtbForm.Invoke(new Action(() =>
+                {
+                    this.rtbForm.Text = "正在进行第 " + i.ToString() + " 次检查...";
+                }));
+
+                var options = new Dictionary<string, object> { { "result_type", "json" } };
+                var result = client.TableRecognitionGetResult(
+                    result_id["result"][0]["request_id"].ToString(),
+                    options
+                    );
+                if (result["result"]["ret_code"].ToString() == "3")
+                {
+                    this.rtbForm.Invoke(new Action(() =>
+                    {
+                        this.rtbForm.Text = result.ToString();
+                    }));
+                    return;
+                }
+
+                // 每次检查 Sleep 1s
+                System.Threading.Thread.Sleep(1000);
+            }
 
             // 启用按钮
             this.btnForm.Invoke(new Action(() =>
