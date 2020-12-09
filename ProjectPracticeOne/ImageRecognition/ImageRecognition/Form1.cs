@@ -22,6 +22,7 @@ namespace ImageRecognition
         private string APIKEY = "l2h6aObf67bDPUTzRwKLXQHQ";
         private string APISECRET = "Mipvg24iSHMewTPpmFYZN6BR41sm0q4h";
         private string fileName = "";
+
         private void btnOpenFile_Click(object sender, EventArgs e)
         {
             OpenFileDialog fileDialog = new OpenFileDialog();
@@ -75,41 +76,24 @@ namespace ImageRecognition
 	                        {"with_face", this.cbDetctFace.Checked}
 	                        };
             var resultObject = client.ObjectDetect(image, options);
-
-            //原图片文件
-            Image fromImage = Image.FromFile(fileName);
-            //创建新图位图
-            Bitmap bitmap = new Bitmap(fromImage.Width, fromImage.Height);
-            //创建作图区域
-            Graphics graphic = Graphics.FromImage(bitmap);
-            //截取原图相应区域写入作图区
+            
             int x = Convert.ToInt32(resultObject["result"]["left"]);
             int y = Convert.ToInt32(resultObject["result"]["top"]);
             int width = Convert.ToInt32(resultObject["result"]["width"]);
             int height = Convert.ToInt32(resultObject["result"]["height"]);
-            // Create pen.
-            Pen Pen = new Pen(Color.Red, 3);
-            graphic.DrawRectangle(Pen, x, y, width, height);
-            graphic.();
+
+            Console.WriteLine(x.ToString());
+            Console.WriteLine(y.ToString());
+            Console.WriteLine(width.ToString());
+            Console.WriteLine(height.ToString());
+
+            Bitmap image1 = new Bitmap(fileName);
+            Graphics g = Graphics.FromImage(image1);
+            Pen pen = new Pen(Color.Red, 3);
+            g.DrawRectangle(pen, x, y, width, height);
+            this.pictureBox1.Image = image1;
         }
 
-        private void pictureBox1_Paint(object sender, PaintEventArgs e, JObject resultObject)
-        {
-
-            //原图片文件
-            Image imageOri = Image.FromFile(fileName);
-            Graphics graphic = Graphics.FromImage(imageOri);
-            int x = Convert.ToInt32(resultObject["result"]["left"]);
-            int y = Convert.ToInt32(resultObject["result"]["top"]);
-            int width = Convert.ToInt32(resultObject["result"]["width"]);
-            int height = Convert.ToInt32(resultObject["result"]["height"]);
-            // Create pen.
-            Pen Pen = new Pen(Color.Red, 3);
-            graphic.DrawRectangle(Pen, x, y, width, height);
-
-
-
-        }
         private void btnDishes_Click(object sender, EventArgs e)
         {
             //菜品识别
@@ -238,7 +222,6 @@ namespace ImageRecognition
                 }
             }
         }
-
 
         private void btnAnimal_Click(object sender, EventArgs e)
         {
