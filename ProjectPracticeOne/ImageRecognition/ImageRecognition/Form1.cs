@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
+using System.Threading;
 
 namespace ImageRecognition
 {
@@ -31,6 +32,18 @@ namespace ImageRecognition
                 this.pictureBox1.Load(fileDialog.FileName);
                 fileName = fileDialog.FileName;
             }
+            var thGeneralDetection = new Thread(threadGeneralDetection);
+            thGeneralDetection.Name = "thGeneralDetection";
+            thGeneralDetection.Start();
+
+            var thMainObjectDetection = new Thread(threadMainObjectDetection);
+            thMainObjectDetection.Name = "thMainObjectDetection";
+            thMainObjectDetection.Start();
+        }
+
+        private void threadGeneralDetection()
+        {
+            Console.WriteLine("threadGeneralDetection start");
             //通用物体及场景识别
             var client = new Baidu.Aip.ImageClassify.ImageClassify(APIKEY, APISECRET);
             var image = File.ReadAllBytes(fileName);
@@ -46,7 +59,10 @@ namespace ImageRecognition
                 sb.AppendLine();
             }
             //显示结果
-            this.richTextBox1.Text = sb.ToString();
+            this.richTextBox1.Invoke(new Action(() => {
+                this.richTextBox1.Text = sb.ToString();
+            }));
+            //this.richTextBox1.Text = sb.ToString();
             for (int i = 0; i < result["result"].Count(); i++)
             {
                 bool desExists = result["result"][i]["baike_info"].ToString().Contains("description");
@@ -54,7 +70,11 @@ namespace ImageRecognition
                 if (desExists && imageUrlExists)
                 {
                     //显示描述
-                    this.richTextBox2.Text = result["result"][i]["baike_info"]["description"].ToString();
+                    this.richTextBox2.Invoke(new Action(() =>
+                    {
+                        this.richTextBox2.Text = result["result"][i]["baike_info"]["description"].ToString();
+                    }));
+                    //this.richTextBox2.Text = result["result"][i]["baike_info"]["description"].ToString();
                     //显示图片
                     try
                     {
@@ -71,12 +91,20 @@ namespace ImageRecognition
                 }
             }
 
+            Console.WriteLine("threadGeneralDetection end");
+        }
+
+        private void threadMainObjectDetection()
+        {
+            Console.WriteLine("threadMainObjectDetection start");
             //图像主体识别
+            var client = new Baidu.Aip.ImageClassify.ImageClassify(APIKEY, APISECRET);
+            var image = File.ReadAllBytes(fileName);
             var optionsObject = new Dictionary<string, object>{
 	                        {"with_face", this.cbDetctFace.Checked}
 	                        };
-            var resultObject = client.ObjectDetect(image, options);
-            
+            var resultObject = client.ObjectDetect(image, optionsObject);
+
             int x = Convert.ToInt32(resultObject["result"]["left"]);
             int y = Convert.ToInt32(resultObject["result"]["top"]);
             int width = Convert.ToInt32(resultObject["result"]["width"]);
@@ -92,6 +120,7 @@ namespace ImageRecognition
             Pen pen = new Pen(Color.Red, 3);
             g.DrawRectangle(pen, x, y, width, height);
             this.pictureBox1.Image = image1;
+            Console.WriteLine("threadMainObjectDetection end");
         }
 
         private void btnDishes_Click(object sender, EventArgs e)
