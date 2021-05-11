@@ -1,66 +1,45 @@
 import argparse as ap
 import cv2
-import imutils
-import numpy as np
-import os
 from sklearn.externals import joblib
 from scipy.cluster.vq import *
-
 from sklearn import preprocessing
-import numpy as np
-
 from pylab import *
 from PIL import Image
-# from rootsift import RootSIFT
 
-# Get the path of the training set
+# 获取图片路径
 parser = ap.ArgumentParser()
 parser.add_argument("-i", "--image", help="Path to query image", required=True)
 args = vars(parser.parse_args())
-
-# Get query image path
 image_path = args["image"]
 
-# Load the classifier, class names, scaler, number of clusters and vocabulary
-im_features, image_paths, idf, numWords, voc = joblib.load("bof.pkl")
+# 加在分类器，图片路径，idf， 词汇数量，词典
+im_features, image_paths, idf, numWords, voc = joblib.load("data.pkl")
 
-# Create feature extraction and keypoint detector objects
-# fea_det = cv2.FeatureDetector_create("SIFT")
-# des_ext = cv2.DescriptorExtractor_create("SIFT")
+# 创建特征提取对象
 fea_det = cv2.xfeatures2d.SIFT_create()
 
-# List where all the descriptors are stored
+# 存储描述子
 des_list = []
 
+# sift特征提取
 im = cv2.imread(image_path)
-# kpts = fea_det.detect(im)
-# kpts, des = des_ext.compute(im, kpts)
-kpts = fea_det.detect(im)
 kps, descs = fea_det.detectAndCompute(im, None)
-
-# rootsift
-#rs = RootSIFT()
-#des = rs.compute(kpts, des)
-
 des_list.append((image_path, descs))
-
-# Stack all the descriptors vertically in a numpy array
-descriptors = des_list[0][1]
-
-#
+descrs = des_list[0][1]
 test_features = np.zeros((1, numWords), "float32")
-words, distance = vq(descriptors,voc)
+words, distance = vq(descrs,voc)
 for w in words:
     test_features[0][w] += 1
 
-# Perform Tf-Idf vectorization and L2 normalization
+# 计算Tf-Idf向量和L2 normalization
 test_features = test_features*idf
 test_features = preprocessing.normalize(test_features, norm='l2')
 
+# 计算距离
 score = np.dot(test_features, im_features.T)
 rank_ID = np.argsort(-score)
 
-# Visualize the results
+# 结果可视化
 figure()
 gray()
 subplot(5,4,1)
